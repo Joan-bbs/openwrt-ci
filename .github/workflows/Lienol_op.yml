@@ -1,4 +1,4 @@
-name: LEDE_local_Build
+name: Lienol_local_Build
 
 on:
   workflow_dispatch:
