@@ -10,8 +10,11 @@ git clone --depth=1 https://github.com/selfcan/luci-app-onliner.git package/luci
 git clone --depth=1 https://github.com/sirpdboy/luci-app-netspeedtest.git package/luci-app-netspeedtest
 git clone --depth=1 https://github.com/sirpdboy/luci-app-partexp.git package/luci-app-partexp
 git clone --depth=1 https://github.com/destan19/OpenAppFilter.git package/OpenAppFilter
+
 git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone --depth=1 https://github.com/0x676e67/luci-theme-design.git package/luci-theme-design
+git clone --depth=1 https://github.com/microdockman/passwall2.git package/passwall2
+git clone --depth=1 https://github.com/douglarek/luci-app-homeproxy.git package/luci-app-homeproxy
 
 
 
