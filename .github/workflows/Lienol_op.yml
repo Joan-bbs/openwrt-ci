@@ -1,4 +1,4 @@
-name: Lienol_local_Build
+name: LEDE_local_Build
 
 on:
   workflow_dispatch:
@@ -6,15 +6,15 @@ on:
     - cron: 0 19 * * *
 
 env:
-  REPO_URL: https://github.com/ending7495/openwrt.git
-  # REPO_BRANCH: 24.10
+  REPO_URL: https://github.com/Lienol/openwrt.git
+  REPO_BRANCH: 24.10
   CONFIG_FILE: configs/LEDE_local.config
   DIY_SCRIPT: diy-script.sh
   CLASH_KERNEL: amd64
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: Lienol_ER1_local
+  FIRMWARE_TAG: LEDE_ER1_local
   TZ: Asia/Shanghai
 
 jobs:
@@ -63,7 +63,7 @@ jobs:
     - name: Clone Source Code(克隆源代码)
       run: |
         df -hT $GITHUB_WORKSPACE
-        git clone --depth 1 $REPO_URL openwrt
+        git clone --depth 1 -b $REPO_BRANCH $REPO_URL openwrt
         cd openwrt
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
         VERSION_INFO=$(git show -s --date=short --format="作者: %an<br/>时间: %cd<br/>内容: %s<br/>hash: %H")
