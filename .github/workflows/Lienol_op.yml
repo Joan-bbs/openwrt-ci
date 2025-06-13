@@ -1,4 +1,4 @@
-name: Lienol_local_Build
+name: Lienol_Build
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ env:
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: Lienol_ER1_local
+  FIRMWARE_TAG: Lienol_ER1
   TZ: Asia/Shanghai
 
 jobs:
@@ -68,24 +68,51 @@ jobs:
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
         VERSION_INFO=$(git show -s --date=short --format="作者: %an<br/>时间: %cd<br/>内容: %s<br/>hash: %H")
         echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
+        # VERSION_KERNEL=$(grep -oP 'LINUX_KERNEL_HASH-\K[0-9]+\.[0-9]+\.[0-9]+' include/kernel-6.12)
+        # echo "VERSION_KERNEL=$VERSION_KERNEL" >> $GITHUB_ENV
+        # # Add a feed source(By Superman)
+
+        
+    
+        
 
     - name: Run DIY Script(执行自定义脚本)
       run: |
         cd $OPENWRT_PATH 
-        chmod +x ../$DIY_SCRIPT
-        ../$DIY_SCRIPT
+        chmod +x ../$DIY_SCRIPT  # 添加执行权限 
+        ../$DIY_SCRIPT            # 在源码目录外执行脚本 
         echo "自定义脚本执行完成！"
+        
+
+    
+
+    # - name: Generate Variables(生成变量)
+    #   run: |
+    #     cp $CONFIG_FILE $OPENWRT_PATH/.config
+    #     cd $OPENWRT_PATH
+    #     make defconfig > /dev/null 2>&1
+    #     SOURCE_REPO="$(echo $REPO_URL | awk -F '/' '{print $(NF)}')"
+    #     echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
+    #     DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
+    #     echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
+    #     DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
+    #     echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
 
     - name: Generate Variables(生成变量)
       run: |
         cp $CONFIG_FILE $OPENWRT_PATH/.config
         cd $OPENWRT_PATH
+        make defconfig > /dev/null 2>&1
         SOURCE_REPO="$(echo $REPO_URL | awk -F '/' '{print $(NF)}')"
         echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
-        DEVICE_TARGET=$(grep CONFIG_TARGET_BOARD .config | cut -d '"' -f2)
+        DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
         echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
-        DEVICE_SUBTARGET=$(grep CONFIG_TARGET_SUBTARGET .config | cut -d '"' -f2)
+        DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
         echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
+        # VERSION_KERNEL=$(make kernelversion)
+        # echo "VERSION_KERNEL=$VERSION_KERNEL" >> $GITHUB_ENV
+   
+
 
     - name: Cache Toolchain(缓存工具链)
       if: env.CACHE_TOOLCHAIN == 'true'
@@ -94,7 +121,8 @@ jobs:
         ccache: false
         mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
         prefix: ${{ env.OPENWRT_PATH }}
-
+        
+    
     - name: Load Custom Configuration(加载自定义配置)
       run: |
         [ -e files ] && mv files $OPENWRT_PATH/files
@@ -103,6 +131,7 @@ jobs:
     - name: Download DL Package(下载DL软件包)
       run: |
         cd $OPENWRT_PATH
+        make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
@@ -158,11 +187,13 @@ jobs:
         body: |
           **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
           ### 📒 固件信息(无WIFI)
-          - 💻 固件平台: ${{ env.FIRMWARE_TAG }}
-          - ⚙ 源码仓库: ${{ env.REPO_URL }}
-          - 🌱 分支: ${{ env.REPO_BRANCH }}
+          - 无WIFI带有线NSS的6.12内核固件
+          - 💻 这是 ${{ env.FIRMWARE_TAG }} 平台使用的 OpenWrt 固件
+          - ⚽ 固件源码: ${{ env.REPO_URL }}
+          - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🌐 默认地址: 192.168.10.1
           - 🔑 默认密码: 无
-          - 📆 编译时间: ${{ env.DATE }}
-          - 🔁 提交记录:
-          - ${{ env.VERSION_INFO }}
+          ### 🧊 固件版本
+          # - 固件内核版本：${{ env.VERSION_KERNEL }}
+          - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
+          - ${{ env.VERSION_INFO }} 我只拉取指定分支的源代码
