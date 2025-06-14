@@ -17,6 +17,13 @@
 │   └── recs07.config          <- 编译配置文件           
 ├── diy-script.sh              <- 自定义补丁/设置脚本    
 └── README.md
+使用教程也非常简单
+只需要改这几项变量即可：
+env:
+  REPO_URL: https://github.com/immortalwrt/immortalwrt.git     # 改源码
+  REPO_BRANCH: openwrt-21.02                                   # 改分支
+  CONFIG_FILE: configs/x86_64.config                           # 改 config
+
 ```                                           
 
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
