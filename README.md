@@ -6,6 +6,19 @@
 
 - **本固件禁止用于任何商业用途，请务必严格遵守国家互联网使用相关法律规定！**
 
+## 本仓库的结构
+```
+通用云编译模板
+你的 GitHub 仓库结构：
+├── .github/
+│   └── workflows/
+│       └── build.yml          <- 上面这个 workflow 文件 
+├── configs/
+│   └── recs07.config          <- 编译配置文件           
+├── diy-script.sh              <- 自定义补丁/设置脚本    
+└── README.md
+```                                           
+
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
 - 固件默认管理地址：`192.168.1.1` 默认用户：`root` 默认密码：`password`
 - 源码：[LiBwrt](https://github.com/LiBwrt-op/openwrt-6.x)
