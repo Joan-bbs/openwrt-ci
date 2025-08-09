@@ -18,7 +18,7 @@ echo 'src-git kiddin9 https://github.com/kiddin9/kwrt-packages.git' >>feeds.conf
 sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
 
 # 修改默认主机名
-sed -i "s/hostname='.*'/hostname='HOMR'/g" package/base-files/files/bin/config_generate
+sed -i "s/hostname='.*'/hostname='Joan'/g" package/base-files/files/bin/config_generate
 
 # 添加 LuCI 状态页的构建信息  这行代码有问题，版本号会跟固件内核版本号对应不上
 # sed -i "s/(\(luciversion || ''\))/(\1) + (' \/ Build by Superman')/g" feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js
