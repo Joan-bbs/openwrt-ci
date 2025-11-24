@@ -15,7 +15,7 @@ echo 'src-git kiddin9 https://github.com/kiddin9/kwrt-packages.git' >>feeds.conf
 
 ### ========== 3. 修改默认 IP、主机名、界面信息等 ==========
 # 修改默认 IP 地址
-sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.8.1/g' package/base-files/files/bin/config_generate
 
 # 修改默认主机名
 sed -i "s/hostname='.*'/hostname='Joan'/g" package/base-files/files/bin/config_generate
@@ -37,10 +37,10 @@ sed -i "s/${orig_version}/R${date_version} by Superman/g" package/lean/default-s
 
 ### ========== 4. 修复兼容问题 ==========
 # 修复 hostapd 报错
-cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
+#cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
 
 # 修复 armv8 平台 xfsprogs 报错
-sed -i 's/TARGET_CFLAGS.*/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/g' feeds/packages/utils/xfsprogs/Makefile
+#sed -i 's/TARGET_CFLAGS.*/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/g' feeds/packages/utils/xfsprogs/Makefile
 
 ### ========== 5. 统一修正 Makefile 引用路径 ==========
 # find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's|\.\./\.\./luci.mk|$(TOPDIR)/feeds/luci/luci.mk|g' {}
